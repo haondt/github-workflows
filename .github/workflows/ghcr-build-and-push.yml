@@ -38,7 +38,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ inputs.repository }}/${{ inputs.image }}
+          images: ghcr.io/${{ inputs.repository }}/${{ inputs.image }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}

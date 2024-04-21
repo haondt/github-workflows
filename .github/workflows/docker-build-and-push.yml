@@ -19,10 +19,8 @@ on:
     secrets:
       DOCKER_USERNAME:
         required: false
-        type: string
       DOCKER_PASSWORD:
         required: false
-        type: string
   
 env:
   IMAGE_FULL_NAME: >-

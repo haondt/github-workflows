@@ -6,11 +6,10 @@ on:
 
 jobs:
   docker-build-and-push:
-    uses: haondt/github-workflows/.github/workflows/docker-build-and-push.yml@main
+    uses: haondt/github-workflows/.github/workflows/ghcr-build-and-push.yml@main
     secrets: inherit
     with:
-      REGISTRY: ghcr
-      IMAGE_NAME: my-dotnet-project
-      REPOSITORY: haondt
-      BUILD_CONTEXT: My-Dotnet-Project
-      DOCKERFILE: My-Dotnet-Project/My-Dotnet-Project/Dockerfile
+      image: my-dotnet-project
+      repository: haondt
+      context: My-Dotnet-Project
+      file: My-Dotnet-Project/My-Dotnet-Project/Dockerfile

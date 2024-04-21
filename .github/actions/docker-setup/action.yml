@@ -1,6 +1,21 @@
+inputs:
+  registry:
+    required: true
+    type: string
+  image:
+    required: true
+    type: string
+outputs:
+  tags: 
+    value: ${{ steps.meta.outputs.tags }}
+  labels: 
+    value: ${{ steps.meta.outputs.labels }}
 runs:
   using: "composite"
   steps:
+    - name: checkout repository
+      uses: actions/checkout@v4
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
        
@@ -11,6 +26,7 @@ runs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: ${{ inputs.registry }}/${{ inputs.image }}
         tags: |
           type=semver,pattern={{version}}
+          type=semver,pattern={{major}}

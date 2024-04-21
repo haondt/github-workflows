@@ -1,0 +1,53 @@
+on:
+  workflow_call:
+    inputs:
+      repository:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+      context:
+        required: true
+        type: string
+      file:
+        required: true
+        type: string
+  
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        packages: write
+        # This is used to complete the identity challenge
+        # with sigstore/fulcio when running outside of PRs.
+        id-token: write
+
+    steps:
+        - name: set up for docker
+          id: setup
+          uses: ./.github/actions/docker-setup
+          with:
+            registry: ${{ inputs.registry }}
+            image: ${{ inputs.image }}
+
+        - name: log into ghcr
+          uses: docker/login-action@v3
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Build and push Docker image
+          id: build-and-push
+          uses: docker/build-push-action@v5
+          with:
+            context: ${{ inputs.context }}
+            file: ${{ inputs.file }}
+            push: true
+            tags: ${{ steps.setup.outputs.tags }}
+            labels: ${{ steps.setup.outputs.labels }}
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
+        

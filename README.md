@@ -2,6 +2,8 @@
 
 Some github workflows and actions that I reuse.
 
+See [examples](./examples/) folder for, well, examples.
+
 # Workflows
 
 ### docker-build-and-push

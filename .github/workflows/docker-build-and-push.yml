@@ -43,7 +43,7 @@ jobs:
 
     steps:
         - name: checkout repository
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4
 
         - name: set up for docker
           uses: ./.github/actions/docker-setup

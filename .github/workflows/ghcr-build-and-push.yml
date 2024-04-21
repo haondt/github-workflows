@@ -25,29 +25,40 @@ jobs:
         id-token: write
 
     steps:
-        - name: set up for docker
-          id: setup
-          uses: ./.github/actions/docker-setup
-          with:
-            registry: ${{ inputs.registry }}
-            image: ${{ inputs.image }}
+      - name: checkout repository
+        uses: actions/checkout@v4
 
-        - name: log into ghcr
-          uses: docker/login-action@v3
-          with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-
-        - name: Build and push Docker image
-          id: build-and-push
-          uses: docker/build-push-action@v5
-          with:
-            context: ${{ inputs.context }}
-            file: ${{ inputs.file }}
-            push: true
-            tags: ${{ steps.setup.outputs.tags }}
-            labels: ${{ steps.setup.outputs.labels }}
-            cache-from: type=gha
-            cache-to: type=gha,mode=max
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
         
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ inputs.repository }}/${{ inputs.image }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}
+
+      - name: log into ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.context }}
+          file: ${{ inputs.file }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      

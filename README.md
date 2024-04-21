@@ -6,33 +6,41 @@ See [examples](./examples/) folder for, well, examples.
 
 # Workflows
 
-### docker-build-and-push
+### docker-hub-build-and-push
+
 <details>
 <summary>expand</summary>
-Builds an image and pushes to docker hub or ghcr.
+Builds an image and pushes to docker hub
 
 Variables:
-- `REGISTRY`
-    - one of 
-      - `ghcr`
-      - `docker-hub`
-- `REPOSITORY`
+- `repository`
   - name of repo for image (e.g. `haondt`)
-- `IMAGE_NAME`
+- `image`
   - name of image
-- `BUILD_CONTEXT`
+- `context`
   - path for build context
-- `DOCKERFILE`
+- `file`
   - path to dockerfile
-Secrets:
+secrets:
 - `DOCKER_USERNAME`
-  - (optional) username for docker hub
+  - username for docker hub
 - `DOCKER_PASSWORD`
-  - (optional) password for docker hub
+  - password for docker hub
 </details>
 
-# Actions
+### ghcr-build-and-push
 
-### docker-setup
+<details>
+<summary>expand</summary>
+Builds an image and pushes to ghcr
 
-sets up qemu, buildx and metadata for docker image
+Variables:
+- `repository`
+  - name of repo for image (e.g. `haondt`)
+- `image`
+  - name of image
+- `context`
+  - path for build context
+- `file`
+  - path to dockerfile
+</details>

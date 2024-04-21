@@ -28,16 +28,26 @@ env:
       inputs.REGISTRY == 'ghcr' && format('ghcr.io/{0}/{1}', inputs.REPOSITORY, inputs.IMAGE_NAME) || 
       format('{0}/{1}', inputs.REPOSITORY, inputs.IMAGE_NAME) 
     }}
+  PACKAGES_PERMISSIONS: >-
+    ${{ 
+      inputs.REGISTRY == 'ghcr' && 'write' ||
+      'read'
+    }}
+  ID_TOKEN_PERMISSIONS: >-
+    ${{ 
+      inputs.REGISTRY == 'ghcr' && 'write' ||
+      'none'
+    }}
   
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
         contents: read
-        packages: write
+        packages: ${{ PACKAGES_PERMISSIONS }}
         # This is used to complete the identity challenge
         # with sigstore/fulcio when running outside of PRs.
-        id-token: write
+        id-token: ${{ ID_TOKEN_PERMISSIONS }}
 
     steps:
         - name: checkout repository

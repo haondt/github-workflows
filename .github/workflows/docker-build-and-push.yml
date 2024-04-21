@@ -19,6 +19,16 @@ on:
       DOCKERFILE:
         required: true
         type: string
+    secrets:
+      DOCKER_USERNAME:
+        required: false
+        type: string
+      DOCKER_PASSWORD:
+        required: false
+        type: string
+      GITHUB_TOKEN:
+        required: true
+        type: string
   
 env:
   IMAGE_FULL_NAME: >-

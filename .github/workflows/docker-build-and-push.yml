@@ -3,10 +3,7 @@ on:
     inputs:
       REGISTRY:
         required: true
-        type: choice
-        options:
-          - ghcr
-          - docker-hub
+        type: string
       REPOSITORY:
         required: true
         type: string
